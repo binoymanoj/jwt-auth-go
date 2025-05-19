@@ -85,22 +85,13 @@ curl -X POST http://localhost:4000/signup \
   -d '{"Email":"user@example.com","Password":"securepassword"}'
 ```
 
-### Login (Once implemented)
+### Login
 
 ```bash
 bashcurl -X POST http://localhost:4000/login \
   -H "Content-Type: application/json" \
   -d '{"Email":"user@example.com","Password":"securepassword"}'
 ```
-
-## Development
-### To Do
-
-- Complete the login endpoint implementation to generate JWT tokens
-- Add middleware for JWT token validation
-- Create protected routes that require authentication
-- Add user profile management
-- Implement token refresh functionality
 
 ## Contributing
 Contributions are welcome! Please feel free to submit a Pull Request.
