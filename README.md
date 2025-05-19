@@ -20,6 +20,7 @@ JWT-Auth-Go is a lightweight authentication service that provides user registrat
 
 ## Project Structure
 
+```
 ├── controllers/
 │   └── authController.go   # Handles authentication logic
 ├── initializers/
@@ -31,6 +32,7 @@ JWT-Auth-Go is a lightweight authentication service that provides user registrat
 ├── main.go                 # Application entry point
 ├── .env                    # Environment variables (create this file)
 └── README.md               # This file
+```
 
 ## Prerequisites
 
