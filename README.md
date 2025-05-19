@@ -10,6 +10,7 @@ JWT-Auth-Go is a lightweight authentication service that provides user registrat
 - PostgreSQL - Relational database
 - bcrypt - Password hashing
 - godotenv - Environment variable management
+- air - Live reload for local development
 
 ## Features
 
@@ -27,10 +28,16 @@ JWT-Auth-Go is a lightweight authentication service that provides user registrat
 │   ├── connectToDB.go      # Database connection setup
 │   ├── loadEnvVariables.go # Environment configuration
 │   └── syncDatabase.go     # Database migration
+├── middleware/
+│   └── requireAuth.go      # Middleware for validating user auth
 ├── models/
 │   └── userModel.go        # User data model
+├── docker-compose.yml      # Docker compose file for PostgreSQL db in local
+├── go.mod                  # GO Mod has the dependencies for the project 
+├── go.sum                  # Auto generated file while installing required packages
 ├── main.go                 # Application entry point
 ├── .env                    # Environment variables (create this file)
+├── .air.toml               # Air configuration for hot reload
 └── README.md               # This file
 ```
 
@@ -63,17 +70,27 @@ PORT=4000
 JWT_SECRET=your_secret_key_here
 ```
 
-4. Create the PostgreSQL database:
+4. Create/Run the PostgreSQL database (using docker):
 
 ```bash
-createdb jwt_auth_db
+docker compose up -d
 ```
 
 5. Build and run the application:
 
+a. Standard mode:
+
 ```bash
 go run main.go
 ```
+
+b. With hod reload (recommended for development)
+
+```bash
+air
+```
+
+*air package should be installed already*
 
 ## How to Use
 
@@ -82,15 +99,22 @@ go run main.go
 ```bash
 curl -X POST http://localhost:4000/signup \
   -H "Content-Type: application/json" \
-  -d '{"Email":"user@example.com","Password":"securepassword"}'
+  -d '{"email":"user@example.com","password":"securepassword"}'
 ```
 
 ### Login
 
 ```bash
-bashcurl -X POST http://localhost:4000/login \
+curl -X POST http://localhost:4000/login \
   -H "Content-Type: application/json" \
-  -d '{"Email":"user@example.com","Password":"securepassword"}'
+  -d '{"email":"user@example.com","password":"securepassword"}'
+```
+
+### Validate
+
+```bash
+curl -X GET http://localhost:4000/validate \
+  --cookie Authorization=<paste_the_cookie_generated_while_logging_in>
 ```
 
 ## Contributing
