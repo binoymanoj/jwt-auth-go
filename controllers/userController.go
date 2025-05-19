@@ -4,8 +4,11 @@ import (
 	"jwt-auth-go/initializers"
 	"jwt-auth-go/models"
 	"net/http"
+	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -69,6 +72,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
+	// Lookup in DB
 	var user models.User
 	initializers.DB.First(&user, "email = ?", body.Email)
 
@@ -76,22 +80,62 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid Email or Password",
 		})
+
+		return
 	}
 
-	// Lookup in DB
+	// Compare passwords
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password))
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid Email or Password",
 		})
+
+		return
 	}
 
-	return
-
-	// Compare passwords
-
 	// Generate JWT Token
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"sub": user.ID,
+		"exp": time.Now().Add(time.Hour * 24 * 30).Unix(),
+	})
+
+	// Sign and get encoded token
+	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to create token",
+		})
+
+		return
+	}
 
 	// Send as reponse
+	c.SetSameSite(http.SameSiteLaxMode)
+	c.SetCookie("Authorization", tokenString, 3600*24*30, "", "", false, true)
+
+	c.JSON(http.StatusOK, gin.H{
+		// "token": tokenString,
+		"message": "Cookie Passed",
+	})
+}
+
+func Validate(c *gin.Context) {
+	userInterface, _ := c.Get("user")
+
+	user := userInterface.(models.User)
+
+	response := gin.H{
+		"id":        user.ID,
+		"email":     user.Email,
+		"createdAt": user.CreatedAt,
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Logged In",
+		"user":    response, // passing only the filtered data
+		// "user":    userInterface, 		// passing all data from user model (this includes hashed password field)
+	})
 }

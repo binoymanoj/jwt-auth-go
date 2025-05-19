@@ -5,7 +5,9 @@ import (
 
 	"jwt-auth-go/controllers"
 	"jwt-auth-go/initializers"
+	"jwt-auth-go/middleware"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -32,6 +34,16 @@ func main() {
 	})
 
 	r.POST("/signup", controllers.SignUp)
+	r.POST("/login", controllers.Login)
+	r.GET("/validate", middleware.RequireAuth, controllers.Validate)
 
-	r.Run(":4000")
+	// r.Run(":4000")
+
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		port = "4000"
+	}
+
+	r.Run(":" + port)
 }
