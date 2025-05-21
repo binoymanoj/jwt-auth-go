@@ -12,7 +12,7 @@ services:
     environment:
       POSTGRES_USER: localdbuser
       POSTGRES_PASSWORD: localPass123
-      POSTGRES_DB: jwt_auth_db
+      POSTGRES_DB: local_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
