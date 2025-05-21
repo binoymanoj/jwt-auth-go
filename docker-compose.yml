@@ -1,5 +1,7 @@
 version: '3.8'
 
+# WARN: Don't ever give any credentials in this file. This file is accessible to the end-user. I've done it because I'll only be using that for local development
+
 services:
   db:
     image: postgres:15
