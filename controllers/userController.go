@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"jwt-auth-go/initializers"
-	"jwt-auth-go/models"
+	"github.com/binoymanoj/jwt-auth-go/initializers"
+	"github.com/binoymanoj/jwt-auth-go/models"
 	"net/http"
 	"os"
 	"time"

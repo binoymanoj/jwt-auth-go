@@ -3,9 +3,9 @@ package main
 import (
 	// "fmt"
 
-	"jwt-auth-go/controllers"
-	"jwt-auth-go/initializers"
-	"jwt-auth-go/middleware"
+	"github.com/binoymanoj/jwt-auth-go/controllers"
+	"github.com/binoymanoj/jwt-auth-go/initializers"
+	"github.com/binoymanoj/jwt-auth-go/middleware"
 	"net/http"
 	"os"
 

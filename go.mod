@@ -1,4 +1,4 @@
-module jwt-auth-go
+module github.com/binoymanoj/jwt-auth-go
 
 go 1.24.3
 
