@@ -1,20 +1,21 @@
-version: '3.8'
-
-# WARN: Don't ever give any credentials in this file. This file is accessible to the end-user. I've done it because I'll only be using that for local development
-
 services:
-  db:
-    image: postgres:15
-    container_name: postgres_db
-    restart: always
-    ports:
-      - "5432:5432"
+  postgres:
+    image: postgres:16-alpine
+    container_name: jwt_auth_postgres
+    restart: unless-stopped
     environment:
       POSTGRES_USER: localdbuser
       POSTGRES_PASSWORD: localPass123
-      POSTGRES_DB: local_db
+      POSTGRES_DB: jwt_auth_db
+    ports:
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U localdbuser -d jwt_auth_db"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 volumes:
   postgres_data:

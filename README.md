@@ -44,7 +44,8 @@ JWT-Auth-Go is a lightweight authentication service that provides user registrat
 ## Prerequisites
 
 - Go 1.16+
-- PostgreSQL
+- Docker
+- Make
 - Git
 
 ## Installation
@@ -73,6 +74,8 @@ JWT_SECRET=your_secret_key_here
 4. Create/Run the PostgreSQL database (using docker):
 
 ```bash
+make db-up
+(or)
 docker compose up -d
 ```
 
@@ -81,10 +84,12 @@ docker compose up -d
 a. Standard mode:
 
 ```bash
-go run main.go
+make build
+(or)
+make
 ```
 
-b. With hod reload (recommended for development)
+b. With hot reload (recommended for development)
 
 ```bash
 air
@@ -97,7 +102,7 @@ air
 ### Signup
 
 ```bash
-curl -X POST http://localhost:4000/signup \
+curl -X POST http://localhost:4000/api/authsignup \
   -H "Content-Type: application/json" \
   -d '{"email":"user@example.com","password":"securepassword"}'
 ```
@@ -105,7 +110,7 @@ curl -X POST http://localhost:4000/signup \
 ### Login
 
 ```bash
-curl -X POST http://localhost:4000/login \
+curl -X POST http://localhost:4000/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"user@example.com","password":"securepassword"}'
 ```
@@ -113,7 +118,7 @@ curl -X POST http://localhost:4000/login \
 ### Validate
 
 ```bash
-curl -X GET http://localhost:4000/validate \
+curl -X GET http://localhost:4000/api/auth/validate \
   --cookie Authorization=<paste_the_cookie_generated_while_logging_in>
 ```
 
