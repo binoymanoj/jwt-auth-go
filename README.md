@@ -38,64 +38,77 @@ JWT-Auth-Go is a lightweight authentication service that provides user registrat
 ├── main.go                 # Application entry point
 ├── .env                    # Environment variables (create this file)
 ├── .air.toml               # Air configuration for hot reload
+├── Makefile                # Build automation
 └── README.md               # This file
 ```
 
 ## Prerequisites
 
-- Go 1.16+
-- Docker
-- Make
-- Git
+- [Go](https://golang.org/dl/) 1.19 or higher (using 1.25 in this project - 1.25 recommended)
+- [Docker](https://www.docker.com/get-started) and Docker Compose
+- [Make](https://www.gnu.org/software/make/) (usually pre-installed on macOS/Linux)
 
 ## Installation
 
-1. Clone the repository:
+Clone the repository:
 
 ```bash
 git clone https://github.com/yourusername/jwt-auth-go.git
 cd jwt-auth-go
 ```
 
-2. Install dependencies:
+## Development Workflow
 
-```bash
-go mod download
-```
+1. **Start development**
+   ```bash
+   make db-up    # Start database
+   make run      # Run the API
+   ```
 
-3. Create a `.env` file in the project root:
+2. Create a `.env` file in the project root:
+   ```bash
+   DB_STRING=postgresql://username:password@localhost:5432/jwt_auth_db
+   PORT=4000
+   JWT_SECRET=your_secret_key_here
+   ```
 
-```bash
-DB_STRING=postgresql://username:password@localhost:5432/jwt_auth_db
-PORT=4000
-JWT_SECRET=your_secret_key_here
-```
+3. **Test your changes**
+   ```bash
+   make run      # Automatically formats and vets before running
+   (or)
+   air           # for hot reload, instantly see the updates without building binary each time
+   ```
 
-4. Create/Run the PostgreSQL database (using docker):
+4. **Build for production**
+   ```bash
+   make build    # Creates binaries in ./bin/ directory
+   ```
 
-```bash
-make db-up
-(or)
-docker compose up -d
-```
+5. **Clean up**
+   ```bash
+   make db-down  # Stop database when done
+   make clean    # Remove build artifacts
+   ```
 
-5. Build and run the application:
-
-a. Standard mode:
-
-```bash
-make build
-(or)
-make
-```
-
-b. With hot reload (recommended for development)
-
-```bash
-air
-```
 
 *air package should be installed already*
+
+## Available Make Commands
+
+Use `make help` to see all available commands:
+
+| Command    | Description                              |
+|------------|------------------------------------------|
+| `help`     | Show help menu                          |
+| `all`      | Format, vet and build the application   |
+| `db-up`    | Start the database (Docker Compose)    |
+| `db-down`  | Stop the database                       |
+| `fmt`      | Format the Go code                      |
+| `vet`      | Check for errors using go vet          |
+| `run`      | Run the application locally             |
+| `build`    | Build binaries for Linux, macOS, Windows |
+| `clean`    | Remove temporary and binary directories  |
+
 
 ## How to Use
 
